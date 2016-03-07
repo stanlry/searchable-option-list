@@ -128,6 +128,8 @@
             scrollTarget: undefined,
             maxHeight: undefined,
             converter: undefined,
+            limit: undefined,
+            limitMsg: undefined,
             asyncBatchSize: 300
         },
 
@@ -817,6 +819,16 @@
         },
 
         _selectionChange: function ($changeItem, skipCallback) {
+            // Add selection limit
+            var count = this.$showSelectionContainer.children('.sol-selected-display-item').length;
+            var isSelect = $changeItem.prop('checked');
+
+            if(this.config.limit && count >= this.config.limit && isSelect) {
+              var msg = this.config.limitMsg || "You cannot select more than " + this.config.limit + " items."
+              alert(msg);
+              $changeItem.prop('checked', false);
+              return;
+            }
 
             // apply state to original select if neccessary
             // helps to keep old legacy code running which depends
